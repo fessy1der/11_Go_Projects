@@ -47,7 +47,9 @@ func statusEndpoint(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	fileServer := http.FileServer(http.Dir("./static"))
+	serveError := http.FileServer(http.Dir("./static/error.html"))
 	http.Handle("/", fileServer)
+	http.Handle("/error", serveError)
 	http.HandleFunc("/status", statusEndpoint)
 	http.HandleFunc("/form", formHandler)
 	http.HandleFunc("/hello", helloHandler)
