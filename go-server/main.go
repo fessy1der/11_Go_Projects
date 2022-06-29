@@ -32,9 +32,23 @@ func formHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Address = %s\n", address)
 }
 
+func statusEndpoint(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/status" {
+		http.Error(w, "404 not found", http.StatusNotFound)
+		return
+	}
+
+	if r.Method != "GET" {
+		http.Error(w, "invalid call", http.StatusNotFound)
+		return
+	}
+	fmt.Fprintf(w, "api call was successful")
+}
+
 func main() {
 	fileServer := http.FileServer(http.Dir("./static"))
 	http.Handle("/", fileServer)
+	http.HandleFunc("/status", statusEndpoint)
 	http.HandleFunc("/form", formHandler)
 	http.HandleFunc("/hello", helloHandler)
 
